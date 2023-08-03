@@ -26,7 +26,7 @@ hints:-
 
 Qn4:- Write a Program to print patten, if n=4
       1
-	2 3
+    2 3
   4 5 6
 7 8 9 10 
 
