@@ -1,0 +1,357 @@
+Qn 14:- Write a C program to sort an array using Merge Sort technique?
+Name :- Nikit Singh Bisht
+Section:- D2
+Roll:- 39
+Branch:- Btech(CSE)
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#define Max_Size 10
+
+//Print Array
+void displayArray(int *arr,int n){
+	printf("Array Elements are:- \n");
+	for(int i=0;i<n;i++){
+		printf("%d ",arr[i]);
+	}
+	printf("\n");
+}
+
+
+//Merge Array
+void mergeArray(int *arr,int start,int end){
+	int mid=start+(end-start)/2;
+	int len1=mid-start+1;
+	int len2=end-mid;
+	int mainArrayIndex=start;
+	int *first=(int*)calloc(len1,sizeof(int));
+	int *second=(int*)calloc(len2,sizeof(int));
+	
+	//Copy array
+	for(int i=0;i<len1;i++){
+		first[i]=arr[mainArrayIndex++];		
+	}
+	mainArrayIndex=mid+1;
+	for(int i=0;i<len2;i++){
+		second[i]=arr[mainArrayIndex++];
+	}
+	mainArrayIndex=start;
+	int index1=0;
+	int index2=0;
+	while(index1 < len1 && index2 < len2){
+		if(first[index1]<second[index2]){
+			arr[mainArrayIndex++]=first[index1++];
+		}
+		else{
+			arr[mainArrayIndex++]=second[index2++];
+		}
+	}
+	while(index1 < len1){
+		arr[mainArrayIndex++]=first[index1++];
+	}
+	while(index2 < len2){
+		arr[mainArrayIndex++]=second[index2++];
+	}
+	free(first);
+	free(second);
+}
+
+
+//MergeSort
+void mergeSort(int *arr,int start,int end){
+	//base case
+	if(start>=end)
+		return ;
+	int mid=start+(end-start)/2;
+	// left part sort
+	mergeSort(arr,start,mid);
+	// Right part sort
+	mergeSort(arr,mid+1,end);
+	
+	//mergeArray
+	mergeArray(arr,start,end);
+}
+
+
+int main(){
+	int n;
+	printf("Enter the Size of Array:- ");
+	scanf("%d",&n);
+	int arr[Max_Size];
+	printf("Enter Array Element:- ");
+	for(int i=0;i<n;i++)
+		scanf("%d",&arr[i]);
+	displayArray(arr,n);
+	mergeSort(arr,0,n-1);
+	printf("After Merge Sort ");
+	displayArray(arr,n);
+	return 0;
+}
+
+
+
+1.Input:-
+Enter the Size of Array:- 5
+Enter Array Element:- 5 4 3 2 1
+Output:-
+Array Elements are:-
+5 4 3 2 1
+After Merge Sort Array Elements are:-
+1 2 3 4 5
+
+
+2.Input:-
+Enter the Size of Array:- 10
+Enter Array Element:- 7 8 9 5 6 3 2 1 4 5
+
+
+
+OutPut:-
+Array Elements are:-
+7 8 9 5 6 3 2 1 4 5
+After Merge Sort Array Elements are:-
+1 2 3 4 5 5 6 7 8 9
+
+
+
+3.Input:- 
+Enter the Size of Array:- 6
+Enter Array Element:- -1 2 7 -5 0 3
+
+OutPut:- 
+Array Elements are:-
+-1 2 7 -5 0 3
+After Merge Sort Array Elements are:-
+-5 -1 0 2 3 7
+
+
+Qn 14:- Write a C program to insert node in a Binary Search Tree and print the inorder traversal. Also, Perform following operation on it
+i)search Node  ii) delete Node.
+
+Name :- Nikit Singh Bisht
+Section:- D2
+Roll:- 39
+Branch:- B-tech (CSE)
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+typedef struct TreeNode{
+	int data;
+	struct TreeNode* left;
+	struct TreeNode* right;
+}TreeNode;
+
+
+//Insert Node
+TreeNode* insertNode(TreeNode* root,int val){
+	root = (TreeNode*)malloc(sizeof(TreeNode));
+	root->data=val;
+	root->left=root->right=NULL;
+	return root;
+}
+
+
+//Insert in Bst
+TreeNode* insertInBst(TreeNode* root,int val){
+	//base case
+	if(root==NULL){
+		root=insertNode(root,val);
+		return root;
+	}
+	if(val>root->data)
+		root->right=insertInBst(root->right,val);
+	else
+		root->left=insertInBst(root->left,val);
+	return root;
+}
+
+
+//Taking Input
+void takeInput(TreeNode** root){
+	int data;
+	scanf("%d",&data);
+	while(data!=-1){
+		*root=insertInBst(*root,data);
+		scanf("%d",&data);
+	}
+}
+
+
+//Print Tree
+void inOrderTraversal(TreeNode* root){
+	if(root==NULL){
+		return ;
+	}
+	inOrderTraversal(root->left);
+	printf("%d ",root->data);
+	inOrderTraversal(root->right);
+}
+
+
+//Searching
+bool searchInBst(TreeNode* root,int val){
+	//base case
+	if(root==NULL) return false;
+	if(root->data==val)	return true;
+	
+	if(root->data>val)	return searchInBst(root->left,val);
+	else	return searchInBst(root->right,val);
+}
+
+
+//return Mini value
+TreeNode* miniValue(TreeNode* root){
+	TreeNode* temp=root;
+	while(temp->left!=NULL){
+		temp=temp->left;
+	}
+	return temp;
+}
+
+
+//Deleteion in Bst
+TreeNode* deleteFromBst(TreeNode* root,int val){
+	//base case 
+	if(root==NULL)	return root;
+	
+	if(root->data==val){
+		//0 child
+		if(!root->left && !root->right){
+			free(root);
+			return NULL;
+		}	
+		//1 child
+			//left child
+		if(root->left && !root->right){
+			TreeNode* temp=root->left;
+			free(root);
+			return temp;
+		}	
+			//right child
+		if(!root->left && root->right){
+			TreeNode* temp=root->right;
+			free(root);
+			return temp;
+		}	
+		//2 child
+		if(root->left && root->right){
+			//using inorder succesor
+			int mini = miniValue(root->right)->data;
+			root->data=mini;
+			root->right = deleteFromBst(root->right,mini);
+			return root;
+		}
+	}
+	//left part mai jaoo
+	else if(root->data>val)
+		root->left=deleteFromBst(root->left,val);	
+	//right part mai jaoo
+	else
+		root->right=deleteFromBst(root->right,val);
+		
+		return root;
+}
+
+
+int main(){
+	TreeNode* root=NULL;
+	printf("Enter BST element:- ");
+	takeInput(&root);
+	printf("InOrder Traversal:- ");
+	inOrderTraversal(root);
+	int choise,val;
+	up:
+	printf("\nEnter the Operation:- ");
+	printf("\n1. Search Node\n2.Delete Node\n3.exit\n");
+	scanf("%d",&choise);
+	if(choise==1){
+		printf("Enter the data you want to Search in BST:- ");
+		scanf("%d",&val);	
+		if(searchInBst(root,val))
+			printf("Element Present in BST");
+		else
+			printf("Element Not Present in BST");
+	}else if(choise ==2){
+		printf("Enter the data you wan to delete from BST:- ");
+		scanf("%d",&val);
+		if(searchInBst(root,val)){
+			root=deleteFromBst(root,val);
+			printf("InOrder Traversal:- ");
+			inOrderTraversal(root);
+		}
+		else
+			printf("Element Not Found in BST");
+	}
+else if(choise==3)	exit(0);
+	
+	goto up;
+	return 0;
+}
+
+
+
+1. Input & Output:-
+Enter BST element:- 100 50 110 120 115 25 70 60 -1
+InOrder Traversal:- 25 50 60 70 100 110 115 120
+
+Enter the Operation:-
+1. Search Node
+2. Delete Node
+3. Exit
+1
+Enter the data you want to Search in BST:- 115
+Element Present in BST
+
+Enter the Operation:-
+1. Search Node
+2. Delete Node
+3. Exit
+2
+Enter the data you want to delete from BST:-  25
+InOrder Traversal:-  50 60 70 100 110 115 120
+
+
+
+2. Input & Output:-
+Enter BST element:-  10 8 21 7 27 5 4 3 -1
+InOrder Traversal:-  3 4 5 7 8 10 21 27
+
+Enter the Operation:-
+1. Search Node
+2. Delete Node
+3. Exit
+1
+Enter the data you want to Search in BST:-  6
+Element Not Present in BST
+
+Enter the Operation:-
+1. Search Node
+2. Delete Node
+3. Exit
+2
+Enter the data you want to delete from BST:-  7
+InOrder Traversal:-  3 4 5 8 10 21 27
+
+
+2. Input & Output:-
+Enter BST element:- 10 7 9 15 17 5 19 16 -1
+InOrder Traversal:- 5 7 9 10 15 16 17 19
+
+Enter the Operation:-
+1. Search Node
+2. Delete Node
+3. Exit
+1
+Enter the data you want to Search in BST:- 15
+Element Present in BST
+
+Enter the Operation:-
+1. Search Node
+2. Delete Node
+3. Exit
+2
+Enter the data you want to delete from BST:- 17
+InOrder Traversal:- 5 7 9 10 15 16 19
