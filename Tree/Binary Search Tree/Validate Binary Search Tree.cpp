@@ -11,11 +11,11 @@
  */
 class Solution {
 private:
-    bool solve(TreeNode* root, int mini,int maxi){
+    bool solve(TreeNode* root, long long mini,long long maxi){
         //base case
         if(!root)   return true;
 
-        if(root->val >= mini && root->val <= maxi){
+        if(root->val > mini && root->val < maxi){
             bool left = solve(root->left,mini,root->val);
             bool right= solve(root->right,root->val,maxi);
             return left && right;
@@ -24,7 +24,7 @@ private:
     }
 public:
     bool isValidBST(TreeNode* root) {
-        return solve(root,INT_MIN,INT_MAX);
+        return solve(root,LONG_MIN,LONG_MAX);
     }
 };
 /*1 Approch :- inorder traversal of Valid binary Search tree is Shorted so we chcek its sorted or not. 
