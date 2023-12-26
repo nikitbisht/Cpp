@@ -34,3 +34,35 @@ public:
         return root;
     }
 };
+
+
+//Amother method using queue
+
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        //base case 
+        if(!root){
+            return NULL;
+        }
+        queue<Node*>q;
+        q.push(root);
+        while(!q.empty()){
+            int size = q.size();
+            while(size > 0){
+                Node* temp = q.front();
+                q.pop();
+                if(size > 1){
+                    temp->next = q.front();
+                }
+                if(temp->left){
+                    q.push(temp->left);
+                    q.push(temp->right);
+                }
+                size--;
+            }
+        }
+        return root;
+    }
+};
